@@ -1,0 +1,164 @@
+#include <conio.h>
+#include <iostream>
+
+using namespace std;
+int row = 20, col = 30;
+int gameover = 1;
+int x = 1, y = 1;
+enum pressing { STOP, UP, DOWN, LEFT, RIGHT };
+pressing motion;
+
+char** create()
+{
+	char**newarr = new char*[row];
+	for (int i = 0; i < row; i++)
+		newarr[i] = new char[col];
+	return newarr;
+}
+
+
+void levels(int choose, char**arr)
+{
+	system("cls");
+	switch (choose)
+	{
+	case 1:
+		char**level1 = new char*[row];
+		for (int i = 0; i < row; i++)
+		{
+			level1[i] = new char[col];
+			for (int j = 0; j < col; j++)
+			{
+				if (arr[y][x] == '*')
+				{
+					if (motion == DOWN)
+						y++;
+					if (motion == UP)
+						y--;
+					if (motion == LEFT)
+						x++;
+					if (motion == RIGHT)
+						x--;
+				}
+
+				if (i == y && j == x)
+				{
+					level1[i][j] = '0';
+					continue;
+				}
+				if((i == 1||i==2)&j == 4)
+				{
+					level1[i][j] = '*';
+					continue;
+				}
+				if (i == 0)
+				{
+					level1[i][j] = '*';
+					continue;
+				}
+				if (j == 0 || j == col - 1)
+				{
+					level1[i][j] = '*';
+					continue;
+				}
+				if (i == row - 1)
+				{
+					level1[i][j] = '*';
+					continue;
+				}
+				level1[i][j] = ' ';
+			}
+		}
+		for (int i = 0; i < row; i++)
+		{
+			for (int j = 0; j < col; j++)
+				arr[i][j] = level1[i][j];
+		}
+		for (int i = 0; i < row; i++)
+		{
+			for (int j = 0; j < col; j++)
+				cout << level1[i][j];
+			cout << endl;
+		}
+		break;
+	}
+}
+
+void start() {
+
+}
+
+void area(char**arr) {
+	system("cls");
+	for (int i = 0; i < row; i++)
+	{
+		for (int j = 0; j < col; j++)
+			cout << arr[i][j];
+		cout << endl;
+	}
+
+}
+void control()
+{
+	if (_kbhit())
+	{
+		switch (_getch())
+		{
+		case 'w':
+			motion = DOWN;
+			break;
+		case 's':
+			motion = UP;
+			break;
+		case 'a':
+			motion = LEFT;
+			break;
+		case 'd':
+			motion = RIGHT;
+			break;
+		}
+	}
+	if (x == col - 1)
+		motion = LEFT;
+	if (x == 0)
+		motion = RIGHT;
+	if (y == 0)
+		motion = UP;
+	if (y == row - 1)
+		motion = DOWN;
+}
+void work()
+{
+	switch (motion)
+	{
+	case DOWN:
+		y--;
+		break;
+	case UP:
+		y++;
+		break;
+	case LEFT:
+		x--;
+		break;
+	case RIGHT:
+		x++;
+		break;
+	}
+}
+
+
+int main()
+{
+	char **arr = create();
+	while (gameover > 0)
+	{
+
+		levels(1,arr);
+		motion = STOP;
+		control();
+		work();
+
+	}
+	system("pause");
+	return 0;
+}
